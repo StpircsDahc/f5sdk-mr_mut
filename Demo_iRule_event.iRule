@@ -1,0 +1,23 @@
+# Author: stpircsdahc
+# Repository: https://github.com/StpircsDahc/f5sdk-mr_mut
+#
+when ACCESS_POLICY_AGENT_EVENT {
+  # Retrieve the APM landing URI, parse it, and place the relevant bits into a variable
+  set requestAction [lindex [split [ACCESS::session data get session.server.landinguri] "/"] 3]
+  #log local0. "Found variables -- $requestAction"
+  # Retrieve the API password needed to authorize the API session via backend scripts
+  set apiPW [ACCESS::session data get session.custom.ICRpasswd]
+  #log local0. "Found API Password: $apiPW"
+  # Establish a handle to the running extension instance
+  #set RPC_HANDLE [ILX::init <PLUGIN_NAME> <EXTENSION_NAME>]
+  set ilx_HANDLE [ILX::init SDK_plugin SDK_extension]
+  # Make the RPC call and store the response in $rpc_response
+  #set rpc_response [ILX::call $ilx_HANDLE <REMOTE_FUNC_NAME> <ARG> <ARG> ...  ]
+  set rpc_response [ILX::call $ilx_HANDLE -timeout 30000 "sshexec" $requestAction $apiPW]
+  # If one value is returned, it becomes TCL string, two or more become a list
+  if {$rpc_response == "yes"} {
+     log local0. "Demo action succeeded"
+     # Reset the APM session after the RPC call is completed
+     ACCESS::session data set "session.server.landinguri" "/"
+  }
+}
