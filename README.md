@@ -11,3 +11,8 @@ This code base requires installation of the f5-common-python SDK
 ```
 $ pip install f5-sdk
 ```
+
+* [python requests](https://github.com/kennethreitz/requests) - http library. (mainly used to assist with SSL cert errors)
+```
+$ pip install requests
+```
