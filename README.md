@@ -4,7 +4,7 @@ This project leverages the f5-common-python SDK for BIG-IP® to implement down a
 
 ## Prerequisites
 This code base require installation of the f5-common-python SDK
-* [f5-common-python] (https://github.com/F5Networks/f5-common-python) - the SDK used.
+* [f5-common-python](https://github.com/F5Networks/f5-common-python) - the SDK used.
 
 ```
 $ pip install f5-sdk
