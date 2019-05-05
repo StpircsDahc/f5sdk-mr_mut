@@ -1,0 +1,93 @@
+---
+wip: # F5 demo build attributes template
+  virtual:
+    name: "publicDNS_VS"
+    vlans:
+      - 'v51-172.16.51.0'
+      # - 'VLAN_F5-vips'
+      # - 'VLAN_TrunkBlackHole'
+    profiles:
+      - {"name":"udp"}
+      # - {"name":"http"}
+      # - {"name":"tcp-wan-optimized", 'context':'clientside'}
+      # - {"name":"tcp-lan-optimized", 'context':'serverside'}
+      # - {"name":"clientssl", 'context':'clientside'}
+      # - {"name":"serverssl", 'context':'serverside'}
+    rules: []
+      # - "_sys_https_redirect"
+    destIP: "172.16.51.53"
+    destMASK: "255.255.255.255"
+    destPORT: "53"
+    listener: "{{ destIP }}:{{ destPORT }}"
+    snat: "on"
+    # snat: "off"
+    # snat: "custom_snatpool_1"
+    protocol: "udp"
+    # protocol: "tcp"
+
+  pool:
+    name: "publicDNS_PL"
+    descr: "F5 python SDK --- Demo pool"
+    monitor: "gateway_icmp"
+    svcPort: "53"
+    lbMethod: "round-robin"
+    minMembers: "5"
+    memMonitor: "default"
+
+
+  nodes:
+    - #node1:
+        name: "google.com-resolver1_ND"
+        ipAddr: "8.8.8.8"
+        descr: "google DNS 1"
+        monitor: "default"
+        PriGrp: "1"
+
+    - #node2:
+        name: "google.com-resolver2_ND"
+        ipAddr: "8.8.4.4"
+        descr: "google DNS 2"
+        monitor: "default"
+        PriGrp: "1"
+
+    - #node3:
+        name: "ultradns.net-resolver1_ND"
+        ipAddr: "156.154.70.1"
+        descr:  "ultra DNS 1"
+        monitor: "none"
+        PriGrp: "3"
+
+    - #node4:
+        name: "ultradns.net-resolver2_ND"
+        ipAddr: "156.154.71.1"
+        descr:  "ultra DNS 2"
+        monitor: "none"
+        PriGrp: "3"
+
+    - #node5:
+        name: "dyndnsinternetguide.com-resolver1_ND"
+        ipAddr: "216.146.35.35"
+        descr:  "dyn DNS 1"
+        monitor: "default"
+        PriGrp: "2"
+
+    - #node6:
+        name: "dyndnsinternetguide.com-resolver2_ND"
+        ipAddr: "216.146.36.36"
+        descr:  "dyn DNS 2"
+        monitor: "default"
+        PriGrp: "2"
+
+    - #node7:
+        name: "opendns.com-resolver1_ND"
+        ipAddr: "208.67.222.222"
+        descr:  "open DNS 1"
+        monitor: "default"
+        PriGrp: "0"
+
+    - #node8:
+        name: "opendns.com-resolver2_ND"
+        ipAddr: "208.67.220.220"
+        descr:  "open DNS 2"
+        monitor: "default"
+        PriGrp: "0"
